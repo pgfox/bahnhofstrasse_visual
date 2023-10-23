@@ -440,7 +440,7 @@ def make_dumb_bell():
     fig.update_layout(xaxis_range=[0, 3000000], xaxis_tickformat=".3s", yaxis={"mirror" : "allticks" } )
     fig.update_layout(margin=dict(l=100, r=180, t=150, b=50))
 
-    fig.update_layout(title=" Trend: more pedestrians last year compared to the previous year. "),
+    fig.update_layout(title=" Pedestrian count have increased for each month."),
     fig.update_layout(title_x=0.45, title_y=.95, title_xanchor='center', title_yanchor='top')
 
     #fig.update_traces(hovertemplate='%{y} <br> pedestrians detected in %{x}')
