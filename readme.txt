@@ -1,5 +1,5 @@
 
-Visuals the pedestrian counts on Bahnhofstrasse for 12 months (Oct-22 to Sept-23)
+Visualize the pedestrian counts on Bahnhofstrasse for 12 months (Oct-22 to Sept-23)
 
 Setup steps (based on MacOS)  
 
