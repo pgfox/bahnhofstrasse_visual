@@ -181,6 +181,9 @@ def update_fig_4_1(selected_data,radio_button_value):
     fig.update_layout( width=800, height=750, yaxis_tickformat=".2s",yaxis_range=yaxis_range_value)
     fig.update_layout(margin=dict(l=100, r=180, t=150, b=150))
 
+    fig.update_xaxes(title_text='Months')
+    fig.update_yaxes(title_text='Pedestrian count')
+
     return fig
 
 
@@ -245,6 +248,9 @@ def make_fig_detections_by_location():
                       )
                       )
 
+    fig.update_xaxes(title_text='Location')
+    fig.update_yaxes(title_text='Pedestrian count')
+    
     return fig
     
 
@@ -322,7 +328,9 @@ def make_fig_detections_by_month():
                           font_color=COLOR_PALETTE[1],
                       )
                       )
-    #fig.update_layout(xaxis_tickformat=".2s", )
+    
+    fig.update_xaxes(title_text='Month')
+    fig.update_yaxes(title_text='Pedestrian count')
 
     return fig
 
@@ -385,7 +393,7 @@ def make_dumb_bell():
             y=list_months,
             mode="markers",
             name=" ",
-            hovertemplate='%{y} in previous 12 months <br> pedestrians detected is %{x}',
+            hovertemplate='%{y} (from previous 12 months) <br> pedestrians detected is %{x}',
             showlegend=True,
             marker=dict(
                 color=COLOR_PALETTE[0],
@@ -398,7 +406,7 @@ def make_dumb_bell():
             y=list_months,
             mode="markers",
             name=" ",
-            hovertemplate='%{y} in last 12 months <br> pedestrians detected is %{x}',
+            hovertemplate='%{y} (from last 12 months) <br> pedestrians detected is %{x}',
             showlegend=True,
             marker=dict(
                 color=COLOR_PALETTE[3],
@@ -443,9 +451,12 @@ def make_dumb_bell():
         tickmode = 'array',
         tickvals = [0,1_000_000, 2_000_000, 3_000_000],
         ticktext = ['0','1M', '2M', '3M']
+    )       
     )
-     
-)
+    
+    fig.update_xaxes(title_text='Pedestrian count')
+    fig.update_yaxes(title_text='Month')
+    
 
     return fig
 
@@ -468,13 +479,15 @@ def make_fig_3():
     
     fig = default_fig_layout(fig)
 
-    fig.update_layout(margin=dict(l=100, r=180, t=100, b=50))
+    fig.update_layout(margin=dict(l=100, r=180, t=100, b=150))
     fig.update_layout(
         title="Counts remain quite consistent through out the year <br> and appear to follow a weekly cycle."),
     fig.update_layout(title_x=0.45, title_y=.95, title_xanchor='center', title_yanchor='top')        
         
     fig.update_layout(
-        xaxis_tickformat = '%B %Y',
+        width=900,
+        height=750,
+        xaxis_tickformat = '%d %B %Y',
         yaxis_tickformat = '.3s'
     )    
         
@@ -505,6 +518,8 @@ def make_fig_3():
                                      size=16),
                            showarrow=False)
     
+    fig.update_xaxes(title_text='Date',tickangle=45)
+    fig.update_yaxes(title_text='Pedestrian count')
 
     return fig
 
@@ -590,6 +605,9 @@ def make_violin():
             yanchor="bottom",
             showarrow=True,
             arrowhead=1)
+    
+    fig.update_xaxes(title_text='Day of week')
+    fig.update_yaxes(title_text='Pedestrian count')
 
     return fig
 
@@ -922,7 +940,7 @@ app.layout = html.Div([
             dbc.Col(dcc.Graph(id='fig_3_6', figure=make_map(), config={
                 'displayModeBar': False
             }),
-                   # width=6, lg={'size': 8, "offset": 2, 'order': 2}
+                 
                    width={"size": 6, "offset": 0, "order":1},
                     ),
             dbc.Col(html.Div([
@@ -1127,7 +1145,7 @@ app.layout = html.Div([
 
             dbc.Col(html.Div([html.Br(), html.Br(), html.Br(), html.Br(),
                               "In the last 12 months, which day and 'times of day'",html.Br(),
-                              " has biggest portion of pedestrians?",
+                              " had biggest portion of pedestrians?",
                               ], className="my-subtitle", style={'text-align': 'center'}),
                     width={'size': 12, "offset": 0, 'order': 1}),
 
