@@ -79,7 +79,7 @@ def default_fig_layout(fig):
         ),
         showlegend=False,
         plot_bgcolor='white',
-        #hovermode="x unified"
+       
     )
 
     return fig
@@ -106,8 +106,6 @@ breakdown_card = dbc.Card(
     ],className="top-card"
 )
 
-
-#id="radio_button", value='both'
 
 @app.callback(
     Output("card_graph", "figure"), [Input("card-tabs", "value"),
@@ -203,7 +201,6 @@ def make_fig_detections_by_location():
     fig.update_traces(hovertemplate='%{y} <br> pedestrians detected in test %{x}')
 
     fig.update_layout(margin=dict(l=150, r=180, t=100, b=50))
-    #fig.update_layout(title="December had the most pedestrians detected in the last 12 months (October 2022 - September 2023)"),
     fig.update_layout(title_x=0.45, title_y=.95, title_xanchor='center', title_yanchor='top')
 
     fig.update_layout(showlegend=False, plot_bgcolor='white',
@@ -247,8 +244,6 @@ def make_fig_detections_by_location():
                           font_color=COLOR_PALETTE[1],
                       )
                       )
-    
-    #fig.update_layout(xaxis_tickformat=".3s", )
 
     return fig
     
@@ -257,7 +252,7 @@ def make_fig_detections_by_location():
 
 def make_fig_detections_by_month():
     df = data_manager.count_by_month_last_year().reset_index()
-    print(df.head())
+    LOG.debug(df.head())
 
   
 
@@ -459,10 +454,7 @@ def make_dumb_bell():
 def make_fig_3():
     df = data_manager.count_by_day_last_year().reset_index().reset_index()
 
-
-    #print('====> make_fig_3 =====>')
-    #print(df.head())
-    
+  
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df["date"], y=df["pedestrians_count"],
                                  name="",
@@ -910,8 +902,8 @@ app.layout = html.Div([
     dbc.Row(
         [
             dbc.Col(html.Div([html.Br(), html.Br(), html.Br(),
-                              " This visualization uses data from Bahnhoffstrasse (Mitte) and (Süd): ",
-                              " data for Bahnhoffstrasse (Nord) is incomplete." 
+                              " This visualization uses data from Bahnhofstrasse (Mitte) and (Süd): ",
+                              " data for Bahnhofstrasse (Nord) is incomplete." 
 
                               ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
 

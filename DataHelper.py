@@ -41,7 +41,7 @@ class DataManager():
         Oct1_2022 = pd.Timestamp("2022-10-01", tz="UTC")
         Oct1_2023 = pd.Timestamp("2023-10-01", tz="UTC")
   
-        #remove nord data
+        #remove nord data - Nord data is incomplete.
         df = df[df['location_name'] != 'Bahnhofstrasse (Nord)']
   
     
@@ -79,15 +79,6 @@ class DataManager():
     def location_day_time_last_year(self):
         return self.location_day_time(self.DF_LAST_YEAR)
 
-    '''
-    def year_totals(self):
-        previous_total = self.DF_PREVIOUS_YEAR['pedestrians_count'].sum()
-        last_total = self.DF_LAST_YEAR['pedestrians_count'].sum()
-        
-        totals_df = pd.DataFrame(data = {'year': ['last_year', 'previous_year'], 'pedestrians_count': [last_total,previous_total]  })
-        
-        return totals_df
-    '''
     
     def count_by_location(self, df): 
         return df.groupby(['location_name']).agg({'pedestrians_count': 'sum' },sort=False)
