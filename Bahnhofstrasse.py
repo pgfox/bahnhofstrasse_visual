@@ -285,7 +285,7 @@ def make_fig_detections_by_month():
     fig.update_traces(hovertemplate='%{y} <br> pedestrians detected in %{x}')
 
     fig.update_layout(margin=dict(l=150, r=180, t=100, b=50))
-    fig.update_layout(title="December and July are busiest months."),
+    fig.update_layout(title="December and July were busiest months."),
     fig.update_layout(title_x=0.45, title_y=.95, title_xanchor='center', title_yanchor='top')
 
     fig.update_layout(showlegend=False, plot_bgcolor='white',
@@ -1009,7 +1009,7 @@ app.layout = html.Div([
                 
             html.Div([
                 html.Div([html.Br(), html.Br(),
-                       "How does the last 12 month pedestrian counts compare to the previous 12 months counts?",
+                       "How does the last 12 month pedestrian counts compare to the previous 12 month counts?",
                       ], className="my-subtitle", style={'text-align': 'center'}),
             
                 html.Div([
