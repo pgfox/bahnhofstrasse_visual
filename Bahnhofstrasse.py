@@ -35,6 +35,21 @@ data_manager = DataManager()
 
 COLOR_PALETTE = ['#203c3b', '#447270', '#6b9493', '#F6E271', '#F6b915']
 
+# OpenStreetMap tiles with the colour removed (free, no API key needed)
+GREY_MAP_STYLE = {
+    'version': 8,
+    'sources': {
+        'osm': {
+            'type': 'raster',
+            'tiles': ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            'tileSize': 256,
+            'attribution': '© OpenStreetMap contributors',
+        }
+    },
+    'layers': [{'id': 'osm', 'type': 'raster', 'source': 'osm',
+                'paint': {'raster-saturation': -1}}],
+}
+
 
 def default_fig_layout(fig):
     fig.update_layout(
@@ -685,7 +700,7 @@ def make_map():
 
     fig.update_layout(
         mapbox = {
-            'style': "stamen-terrain",
+            'style': GREY_MAP_STYLE,
             'center': { 'lon': 8.538115, 'lat': 47.373045},
             'zoom': 14.5, 'layers': [{
                 'source': {
