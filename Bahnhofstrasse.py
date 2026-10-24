@@ -861,492 +861,166 @@ card_2 = dbc.Card(
 
 #Actual Page layout
 
+# Vertical spacing comes from the classes in assets/my_override.css
+# (page-header, section-title, section-text, side-notes, ...),
+# not from html.Br() spacers, so every section is spaced the same way.
+
+def section_title(title, subtitle=None):
+    children = [html.Div(title, className="my-subtitle")]
+    if subtitle:
+        children.append(html.Div(subtitle, className="section-subtitle"))
+    return dbc.Row(dbc.Col(html.Div(children, className="section-title"), width=12))
+
+
+def section_text(text):
+    return dbc.Row(dbc.Col(html.Div(text, className="container-fluid section-text"),
+                           width={'size': 4, "offset": 4}))
+
+
+def side_notes(children, className="hint-format"):
+    # notes to the left of a chart, vertically centred on it
+    return dbc.Col(html.Div(children, className=className + " side-notes"),
+                   width={'size': 2, "offset": 2, 'order': 0})
+
+
+def hint(text):
+    return html.Div([html.Span(["Hint: "], className="explain-title"), text])
+
+
+def note(label, text):
+    return html.Div([html.Span([label], className="explain-title"), text])
+
+
+def graph(graph_id, figure):
+    return dcc.Graph(id=graph_id, figure=figure, config={'displayModeBar': False})
+
+
+HOVER_HINT = "Hover over graphs for details"
+COMBINED = "(Bahnhofstrasse Süd and Mitte combined)"
+
 app.layout = html.Div([
     dbc.Row(
-        [
-
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(), html.Br(),
-                              html.Div([
-                                  "13.5 Million pedestrians were counted on Zurich's Bahnhofstrasse (Mitte)",
-                                  html.Br(),
-                                  " in the last 12 months"], className="t1-heading")
-                              ], className="container-fluid", style={'text-align': 'center'}),
-                    width={'size': 12, "offset": 0, 'order': 1}),
-        ]
-    ),
-    
-    
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(),
-                              "As part of a joint pilot project involving the international real estate consulting company CBRE,",
-                              " the PropTech company hystreet.com, Swiss Life Asset Managers, Zurich Urban Development and  ",
-                              "the Zurich Bahnhofstrasse Association, Hystreet is collecting pedestrian frequencies on Bahnhofstrasse.",
-                              " Bahnhofstrasse has been segmented into sections and laser scanners are used to detect pedestrians in each section. The counts are updated on an hourly basis."
-
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    
-    dbc.Row(
-        [
-
-            dbc.Col(html.Div([html.Br(), html.Br(),
-                              "In the last 12 months, how many pedestrians were counted in each Bahnhofstrasse section?",
-                              ], className="my-subtitle", style={'text-align': 'center'}),
-                    width={'size': 12, "offset": 0}),
-
-        ]
-    ),
-    dbc.Row(
-        [html.Div([html.Br(), html.Br()])
-         ]),
-    
-    dbc.Row(
-        [
-
-            dbc.Col(dcc.Graph(id='fig_0_5', figure=make_fig_detections_by_location(), config={
-                'displayModeBar': False
-            }),
-                    width=6, lg={'size': 5, "offset": 0, 'order': 1}
-                    ),
-            dbc.Col(html.Div([
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), 
-                html.Span(["Hint: "], className="explain-title"),
-                ("Hover over graphs for details"),
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
-                html.Span(["Last 12 months: "], className="explain-title"),
-                ("1st October 2022 until 30th September 2023"),
-            ], className="hint-format"), width={'size': 2, "offset": 2, 'order': 0}),
-        ]
-    ),
-    
-    dbc.Row(
-        [
-
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(), html.Br(),
-                              "Where exactly is Bahnhofstrasse (Mitte) located?",
-                              ], className="my-subtitle", style={'text-align': 'center'}),
-                    width={'size': 12, "offset": 0, 'order': 1}),
-
-        ]
-    ),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(),
-                              " This visualization uses data from Bahnhofstrasse (Mitte) and (Süd): ",
-                              " data for Bahnhofstrasse (Nord) is incomplete." 
-
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(),
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    dbc.Row(
-        [
-
-            dbc.Col(dcc.Graph(id='fig_3_6', figure=make_map(), config={
-                'displayModeBar': False
-            }),
-                 
-                   width={"size": 6, "offset": 0, "order":1},
-                    ),
-            dbc.Col(html.Div([
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),html.Br(), html.Br(),
-                html.Span(["Hint: "], className="explain-title"),
-                ("Scroll over map to zoom in/out"),
-            ], className="hint-format"), width={'size': 2, "offset": 2, 'order': 0}),
-
-        ]
-    ),
-    
-    dbc.Row(
-        [
-
-            dbc.Col(
-                    html.Div([
-                        html.Div([html.Br(), html.Br(),
-                              "In the last 12 months, how many pedestrians were counted each month?",
-                              ], className="my-subtitle", style={'text-align': 'center'}),
-                    
-                        html.Div([
-                                      "(Bahnhofstrasse Süd and Mitte combined)",
-                                      ], className="container-fluid", style={'text-align': 'center'}),
-                    ], className="my-subtitle", style={'text-align': 'center'}),
-                    
-                    width={'size': 12, "offset": 0}),
-
-        ]
-    ),
-    dbc.Row(
-        [html.Div([html.Br(), html.Br()])
-         ]),
-    dbc.Row(
-        [
-
-            dbc.Col(html.Div([
-                
-            ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    
-    
-    dbc.Row(
-        [
-
-            dbc.Col(dcc.Graph(id='fig_1', figure=make_fig_detections_by_month(), config={
-                'displayModeBar': False
-            }),
-                    width=6, lg={'size': 5, "offset": 0, 'order': 1}
-                    ),
-            dbc.Col(html.Div([
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),html.Br(), html.Br(),
-                html.Span(["Hint: "], className="explain-title"),
-                ("Hover over graphs for details"),
-            ], className="hint-format"), width={'size': 2, "offset": 2, 'order': 0}),
-        ]
-    ),
-    dbc.Row(
-        [html.Div([html.Br(), html.Br(), html.Br(), html.Br()])
-         ]),
-    dbc.Row(
-        [
-           
-            dbc.Col(
-                
+        dbc.Col(html.Div(
             html.Div([
-                html.Div([html.Br(), html.Br(),
-                       "How does the last 12 month pedestrian counts compare to the previous 12 month counts?",
-                      ], className="my-subtitle", style={'text-align': 'center'}),
-            
-                html.Div([
-                              "(Bahnhofstrasse Süd and Mitte combined)",
-                              ], className="container-fluid", style={'text-align': 'center'}),
-            ], className="my-subtitle", style={'text-align': 'center'}),
-            
-            width={'size': 12, "offset": 0}),
-
-        ]
+                "13.5 Million pedestrians were counted on Zurich's Bahnhofstrasse (Mitte)",
+                html.Br(),
+                " in the last 12 months"], className="t1-heading"),
+            className="container-fluid page-header"), width=12)
     ),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(),
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 2}),
-        ]
-    ),
-    dbc.Row(
-        [
 
-            dbc.Col(dcc.Graph(id='fig_2', figure=make_dumb_bell(), config={
-                'displayModeBar': False
-            }),
-                    width=6, lg={'size': 5, "offset": 0, 'order': 1}
-                    ),
-            dbc.Col(html.Div([
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
-                html.Span(["Previous 12 months: "], className="explain-title"),
-                (" 1st October 2021 to 30th September 2022"),
-                html.Br(),html.Br(), html.Br(),
-                html.Span(["Last 12 months: "], className="explain-title"),
-                (" 1st October 2022 to 30th September 2023")
-               
-            ], className="container-fluid"), width={'size': 2, "offset": 2, 'order': 0}),
-        ]
-    ),
-    dbc.Row(
-        [html.Div([html.Br(), html.Br(), html.Br(), html.Br()])
-         ]),
-    dbc.Row(
-        [
+    section_text([
+        "As part of a joint pilot project involving the international real estate consulting company CBRE,",
+        " the PropTech company hystreet.com, Swiss Life Asset Managers, Zurich Urban Development and  ",
+        "the Zurich Bahnhofstrasse Association, Hystreet is collecting pedestrian frequencies on Bahnhofstrasse.",
+        " Bahnhofstrasse has been segmented into sections and laser scanners are used to detect pedestrians in each section. The counts are updated on an hourly basis."
+    ]),
 
-            dbc.Col(
-                
+    section_title("In the last 12 months, how many pedestrians were counted in each Bahnhofstrasse section?"),
+    dbc.Row([
+        dbc.Col(graph('fig_0_5', make_fig_detections_by_location()),
+                width=6, lg={'size': 5, "offset": 0, 'order': 1}),
+        side_notes([
+            hint(HOVER_HINT),
+            note("Last 12 months: ", "1st October 2022 until 30th September 2023"),
+        ]),
+    ]),
+
+    section_title("Where exactly is Bahnhofstrasse (Mitte) located?"),
+    section_text([
+        " This visualization uses data from Bahnhofstrasse (Mitte) and (Süd): ",
+        " data for Bahnhofstrasse (Nord) is incomplete."
+    ]),
+    dbc.Row([
+        dbc.Col(graph('fig_3_6', make_map()),
+                width={"size": 6, "offset": 0, "order": 1}),
+        side_notes([hint("Scroll over map to zoom in/out")]),
+    ]),
+
+    section_title("In the last 12 months, how many pedestrians were counted each month?", COMBINED),
+    dbc.Row([
+        dbc.Col(graph('fig_1', make_fig_detections_by_month()),
+                width=6, lg={'size': 5, "offset": 0, 'order': 1}),
+        side_notes([hint(HOVER_HINT)]),
+    ]),
+
+    section_title("How does the last 12 month pedestrian counts compare to the previous 12 month counts?", COMBINED),
+    dbc.Row([
+        dbc.Col(graph('fig_2', make_dumb_bell()),
+                width=6, lg={'size': 5, "offset": 0, 'order': 1}),
+        side_notes([
+            note("Previous 12 months: ", " 1st October 2021 to 30th September 2022"),
+            note("Last 12 months: ", " 1st October 2022 to 30th September 2023"),
+        ], className="container-fluid"),
+    ]),
+
+    section_title("In the last 12 months, how many pedestrians were counted per day?", COMBINED),
+    dbc.Row([
+        dbc.Col(graph('fig_3', make_fig_3()),
+                width=6, lg={'size': 8, "offset": 0, 'order': 1}),
+        side_notes([hint(HOVER_HINT)]),
+    ]),
+
+    section_title("In the last 12 months, which day of the week was most popular with pedestrians?", COMBINED),
+    dbc.Row([
+        dbc.Col(graph('fig_3_5', make_violin()),
+                width=6, lg={'size': 8, "offset": 0, 'order': 1}),
+        side_notes([hint(HOVER_HINT)]),
+    ]),
+
+    section_title(["In the last 12 months, which day and 'times of day'", html.Br(),
+                   " had biggest portion of pedestrians?"]),
+    dbc.Row([
+        side_notes([
+            html.Div(hint("Click on Inner Circle and Middle Ring to expand. Hover over plot segments to get actual pedestrian counts"),
+                     className="hint-format"),
             html.Div([
-                html.Div([html.Br(), html.Br(),
-                       "In the last 12 months, how many pedestrians were counted per day?",
-                      ], className="my-subtitle", style={'text-align': 'center'}),
-            
-                html.Div([
-                              "(Bahnhofstrasse Süd and Mitte combined)",
-                              ], className="container-fluid", style={'text-align': 'center'}),
-            ], className="my-subtitle", style={'text-align': 'center'}),
-            
-            width={'size': 12, "offset": 0}),
+                note("Inner Circle: ", "Section of Bahnhofstrasse"),
+                note("Middle Ring: ", "Days of week"),
+                note("Outer Ring: ", "Time of day"),
+            ], className="note-list"),
+        ], className="container-fluid"),
+        dbc.Col(graph('fig_4', make_sunburst()),
+                width=6, lg={'size': 5, "offset": 0, 'order': 1}),
+    ]),
+    dbc.Row([
+        dbc.Col(html.Div(note("Night: ", "from 00:01 until 06:00"), className="container-fluid"),
+                width={'size': 2, "offset": 3, 'order': 1}),
+        dbc.Col(html.Div(note("Morning: ", "from 06:01 until 12:00"), className="container-fluid"),
+                width={'size': 2, "offset": 0, 'order': 2}),
+        dbc.Col(html.Div(note("Afternoon: ", "from 12:01 until 18:00"), className="container-fluid"),
+                width={'size': 2, "offset": 0, 'order': 3}),
+        dbc.Col(html.Div(note("Evening: ", "from 18:01 until 24:00"), className="container-fluid"),
+                width={'size': 2, "offset": 0, 'order': 4}),
+    ], className="chart-legend"),
 
-        ]
-    ),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(),
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    dbc.Row(
-        [
-
-            dbc.Col(
-                dcc.Graph(id='fig_3', figure=make_fig_3(), config={
-                    'displayModeBar': False
-                    })
-                , width=6, lg={'size': 8, "offset": 0, 'order': 1}
+    section_title("In the last 12 months, what time was busiest in each month?"),
+    dbc.Row([
+        side_notes([
+            hint("Switch between locations and toggle between count of total/adult/child pedestrians"),
+            dcc.RadioItems(
+                options={
+                    'both': ' Adults & Children',
+                    'adults': ' Adults',
+                    'children': ' Children'
+                },
+                id="radio_button", value='both'
             ),
-            dbc.Col(html.Div([
-                html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),html.Br(), html.Br(),
-                html.Span(["Hint: "], className="explain-title"),
-                ("Hover over graphs for details"),
-            ], className="hint-format"), width={'size': 2, "offset": 2, 'order': 0}),
-
-        ]
-    ),
-
-    dbc.Row(
-        [
-
-            dbc.Col(
-               
-             html.Div([
-                 html.Div([html.Br(), html.Br(),
-                        "In the last 12 months, which day of the week was most popular with pedestrians?",
-                       ], className="my-subtitle", style={'text-align': 'center'}),
-             
-                 html.Div([
-                               "(Bahnhofstrasse Süd and Mitte combined)",
-                               ], className="container-fluid", style={'text-align': 'center'}),
-             ], className="my-subtitle", style={'text-align': 'center'}),
-             
-             width={'size': 12, "offset": 0,'order': 1}),
-
-           
-
-        ]
-    ),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(),
-                              ], className="container-fluid"), width={'size': 4, "offset": 4, 'order': 1}),
-
-        ]
-    ),
-    dbc.Row(
-        [
-
-            dbc.Col(dcc.Graph(id='fig_3_5', figure=make_violin(), config={
-                'displayModeBar': False
-            }),
-                    width=6, lg={'size': 8, "offset": 0, 'order': 1}
-                    ),
-
-             dbc.Col(html.Div([
-                 html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),html.Br(), html.Br(),
-                 html.Span(["Hint: "], className="explain-title"),
-                 ("Hover over graphs for details"),
-             ], className="hint-format"), width={'size': 2, "offset": 2, 'order': 0}),
-        ]
-    ),
-   
-        
-
-    dbc.Row(
-        [
-
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(), html.Br(),
-                              "In the last 12 months, which day and 'times of day'",html.Br(),
-                              " had biggest portion of pedestrians?",
-                              ], className="my-subtitle", style={'text-align': 'center'}),
-                    width={'size': 12, "offset": 0, 'order': 1}),
-
-        ]
-    ),
-
-    dbc.Row(
-        [
-            html.Div([html.Br(), html.Br()])
-        ]
-    ),
-
-    dbc.Row(
-        [
+        ], className="container-fluid"),
         dbc.Col(html.Div([
-            
-                html.Br(), html.Br(),html.Br(),html.Br(),
-                html.Div([html.Span(["Hint: "], className="explain-title"),
-                ("Click on Inner Circle and Middle Ring to expand. Hover over plot segments to get actual pedestrian counts")], className="hint-format"),
-                html.Br(), html.Br(), html.Br(),
-                 html.Span(["Inner Circle: "], className="explain-title"),
-                ("Section of Bahnhofstrasse"),
-                html.Br(), html.Br(),
-                 html.Span(["Middle Ring: "], className="explain-title"),
-                ("Days of week"),
-                html.Br(), html.Br(),
-                 html.Span(["Outer Ring: "], className="explain-title"),
-                ("Time of day"),
-                 html.Br(),
-             
-               
-            ], className="container-fluid"), width={'size': 2, "offset": 1, 'order': 0}),
+            breakdown_card
+        ], className="container-fluid", style={'text-align': 'center'}), width={'size': 5, "offset": 0, 'order': 2}),
+    ]),
 
-            dbc.Col(dcc.Graph(id='fig_4', figure=make_sunburst(), config={
-                'displayModeBar': False
-            },
-                              style={
-                                  "padding-left": "200px",
-                              }
-                              ),
-                    width=6, lg={'size': 5, "offset": 0, 'order': 1}
-                    ),
-            
-        ]
-    ),
-    dbc.Row(
-        [
-            dbc.Col(
-                html.Div([html.Span(["Night: "], className="explain-title"),
-                          ("from 00:01 until 06:00"),
-                    ], className="container-fluid"), width={'size': 2, "offset": 3, 'order': 1}),
-            
-            dbc.Col(
-                html.Div([ html.Span(["Morning: "], className="explain-title"),
-                          ("from 06:01 until 12:00"),
-                    ], className="container-fluid"), width={'size': 2, "offset": 0, 'order': 2}),
-            
-            dbc.Col(
-                html.Div([ html.Span(["Afternoon: "], className="explain-title"),
-                (
-                    "from 12:01 until 18:00"),
-                    ], className="container-fluid"), width={'size': 2, "offset": 0, 'order': 3}),
-            
-            dbc.Col(
-                html.Div([  html.Span(["Evening: "], className="explain-title"),
-                 ("from 18:01 until 24:00"),
-                    ], className="container-fluid"), width={'size': 2, "offset": 0, 'order': 4}),
-        ]),
-    
-    dbc.Row(
-        [
-            html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
-        ]),
-    dbc.Row(
-        [
-            dbc.Col(html.Div([
-                "In the last 12 months, what time was busiest in each month?",
-            ], className="my-subtitle", style={'text-align': 'center'}), width={'size': 12, "offset": 0, 'order': 1}),
-        ]
-    ),
-    dbc.Row(
-        [
-            html.Br(), html.Br(), html.Br(), html.Br(),
-        ]),
-    dbc.Row(
-        [
-           
-            dbc.Col(
-                
-                html.Div(
-                    [    
-                        html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),html.Br(), html.Br(),
-                        html.Span(["Hint: "], className="explain-title"),
-                        ("Switch between locations and toggle between count of total/adult/child pedestrians"),
-                        html.Br(), html.Br(), html.Br(), html.Br(), html.Br(),
-                        html.Br(),
-                        dcc.RadioItems(
-                             options={
-                                 'both': ' Adults & Children',
-                                 'adults': ' Adults',
-                                 'children': ' Children'
-                                 },
-                             id="radio_button", value='both'
-                    )], className="container-fluid", style={'text-align': 'left', 'color':COLOR_PALETTE[1] }
-                         ), 
-                width={'size': 2, "offset": 2, 'order': 1}
-                
-            ),
-           
-           
-           
-            dbc.Col(html.Div([
-                breakdown_card
-            ],className="container-fluid", style={'text-align': 'center'}), width={'size': 5, "offset": 0, 'order': 2}),
-
-        ]
-                ),
+    section_title("Key Points"),
+    *[dbc.Row(dbc.Col(card, width={'size': 6, "offset": 3}), className="key-point")
+      for card in [card_1, card_2, card_3, card_4]],
 
     dbc.Row(
-        [
-            html.Br(), html.Br(), html.Br(), html.Br(),
-        ]),
-
-    dbc.Row(
-        [
-            dbc.Col(html.Div([
-                "Key Points",
-            ], className="my-subtitle", style={'text-align': 'center'}), width={'size': 12, "offset": 0, 'order': 1}),
-        ]
-    ),
-    dbc.Row(
-        [
-            html.Br(), html.Br(),
-        ]),
-    
-     dbc.Row(
-         [
-             dbc.Col(
-                 card_1,
-                 width={'size': 6, "offset": 3, 'order': 0}),
-             html.Br(), html.Br(),
-
-         ]
-     ),
-     dbc.Row(
-         [
-             dbc.Col(
-                 card_2, 
-                 width={'size': 6, "offset": 3, 'order': 0}),
-             html.Br(), html.Br(),
-
-         ]
-     ),
-     dbc.Row(
-         [
-             dbc.Col(
-                 card_3, 
-                 width={'size': 6, "offset": 3, 'order': 0}),
-             html.Br(), html.Br(),
-             
-         ]
-     ),
-     dbc.Row(
-         [
-             dbc.Col(
-                 card_4, 
-                 width={'size': 6, "offset": 3, 'order': 0}),
-             html.Br(), html.Br(),
-             
-             
-         ]
-     ),
-
-    dbc.Row(
-        [
-            dbc.Col(html.Div([html.Br(), html.Br(), html.Br(), html.Br(),
-                              html.A("Source: opendata.swiss - Passantenfrequenzen an der Bahnhofstrasse - Stundenwerte", 
-                                     href='https://opendata.swiss/de/dataset/passantenfrequenzen-an-der-bahnhofstrasse-stundenwerte ', target="_blank",
-                                     className="container-fluid"),
-                              #])        
-                              html.Br(),
-                              html.Br(),
-                              ]
-                             ), width={'size': 4, "offset": 4, 'order': 2}
-                    )
-        ]
+        dbc.Col(html.Div(
+            html.A("Source: opendata.swiss - Passantenfrequenzen an der Bahnhofstrasse - Stundenwerte",
+                   href='https://opendata.swiss/de/dataset/passantenfrequenzen-an-der-bahnhofstrasse-stundenwerte ', target="_blank",
+                   className="container-fluid"),
+            className="page-footer"), width={'size': 4, "offset": 4})
     )
 ],
     className="dbc"
